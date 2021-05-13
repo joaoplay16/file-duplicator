@@ -71,8 +71,8 @@ def file_duplicator():
                                                 print('Erro o arquivo já existe', e)
                                         else:
                                             not_duplicated[f'{folder}'] = 'não tem kml com o nome da pessoa'
-                                    else:
-                                        already_exists_file.append(folder)
+                                else:
+                                    already_exists_file.append(folder)
                     # não tem pasta 'RECIBO E SHAPE' ou 'RECIBO E SHAPEFILE'
                     else:
                         not_duplicated[f'{folder}'] = "'RECIBO E SHAPE' ou 'RECIBO E SHAPEFILE' não existe"
