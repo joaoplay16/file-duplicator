@@ -13,7 +13,7 @@ def accect_remove(text):
     return text
 
 
-def define_path():
+def file_duplicator():
     path = input('Digite o caminho da pasta: ')
     os.chdir(path)
     print('Diretório atual: ', os.getcwd())
@@ -85,4 +85,4 @@ def define_path():
 
 
 
-define_path()
+file_duplicator()
