@@ -2,6 +2,17 @@ import os
 import shutil
 import re
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 def accect_remove(text):
     text = re.sub(r'(?i)[ÁÀÂÃ]', 'a', text)
@@ -41,25 +52,27 @@ def file_duplicator():
                             current_rsitem = current_sub_path + '\\' + rsitem
                             if os.path.isfile(current_rsitem) and current_rsitem.endswith('.kml'):
                                 if rsitem not in ('AREA CONSOLIDADA.kml', 'CONSOLIDADA.kml'):
+                                    area_consolidada_exists = os.path.exists(current_sub_path + '\\CONSOLIDADA.kml') \
+                                        or os.path.exists(current_sub_path + '\\AREA CONSOLIDADA.kml')
+                                    if not area_consolidada_exists:
+                                        kml = accect_remove(rsitem).removesuffix('.kml').upper()
+                                        person_name = accect_remove(folder).upper()
 
-                                    kml = accect_remove(rsitem).removesuffix('.kml').upper()
-                                    person_name = accect_remove(folder).upper()
+                                        match = re.search(rf"{kml}", person_name)
 
-                                    match = re.search(rf"{kml}", person_name)
-
-                                    if match:
-                                        matches += 1
-                                        try:
-                                            print(f'DUPLICANDO {folder}')
-                                            duplicated.append(folder)
-                                            shutil.copy(current_rsitem,
-                                                        current_sub_path + '\\' + 'AREA CONSOLIDADA.kml')
-                                        except shutil.SameFileError as e:
-                                            print('Erro o arquivo já existe', e)
+                                        if match:
+                                            matches += 1
+                                            try:
+                                                print(f'DUPLICANDO {folder}')
+                                                duplicated.append(folder)
+                                                shutil.copy(current_rsitem,
+                                                            current_sub_path + '\\' + 'AREA CONSOLIDADA.kml')
+                                            except shutil.SameFileError as e:
+                                                print('Erro o arquivo já existe', e)
+                                        else:
+                                            not_duplicated[f'{folder}'] = 'não tem kml com o nome da pessoa'
                                     else:
-                                        not_duplicated[f'{folder}'] = 'não tem kml com o nome da pessoa'
-                                else:
-                                    already_exists_file.append(folder)
+                                        already_exists_file.append(folder)
                     # não tem pasta 'RECIBO E SHAPE' ou 'RECIBO E SHAPEFILE'
                     else:
                         not_duplicated[f'{folder}'] = "'RECIBO E SHAPE' ou 'RECIBO E SHAPEFILE' não existe"
