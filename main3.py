@@ -62,43 +62,41 @@ def file_duplicator():
         if os.path.isdir(current_path):
             dir_items = os.listdir(current_path)
             dir_items = [x for x in dir_items if folder_exists(current_path + f'\\{x}') and is_recibo(x)]
-            print(dir_items)
-            if(len(dir_items) > 0):
+            if len(dir_items) > 0:
                 for item in dir_items:
                     current_sub_path = current_path + '\\' + item
                     # verfiricar se o item é uma dessas duas pastas
-                    if is_recibo(item):
 
-                        current_files = os.listdir(current_sub_path)
-                        # itera arquivos da pasta
+                    current_files = os.listdir(current_sub_path)
+                    # itera arquivos da pasta
 
-                        area_consolidada_files = [x for x in current_files if is_area_consolidada(x)]
+                    area_consolidada_files = [x for x in current_files if is_area_consolidada(x)]
 
-                        person_kml_found = 0
-                        if len(area_consolidada_files) == 0:
-                            for file in current_files:
-                                current_rsitem = current_sub_path + '\\' + file
-                                kml = normalize_names(file, folder)['kml']
-                                person_name = normalize_names(file, folder)['person_name']
+                    person_kml_found = 0
+                    if len(area_consolidada_files) == 0:
+                        for file in current_files:
+                            current_rsitem = current_sub_path + '\\' + file
+                            kml = normalize_names(file, folder)['kml']
+                            person_name = normalize_names(file, folder)['person_name']
 
-                                # match = re.search(rf"{kml}", person_name)
-                                match = compare_names(kml, person_name)
+                            # match = re.search(rf"{kml}", person_name)
+                            match = compare_names(kml, person_name)
 
-                                if match:
-                                    matches += 1
-                                    person_kml_found += 1
-                                    try:
-                                        print(f'DUPLICANDO {kml}')
-                                        duplicated.append(folder)
-                                        shutil.copy(current_rsitem,
-                                                    current_sub_path + '\\' + 'AREA CONSOLIDADA.kml')
-                                    except shutil.SameFileError as e:
-                                        print('Erro o arquivo já existe', e)
-                                if person_kml_found == 0:
-                                    not_duplicated[f'{folder}'] = 'não tem kml com o nome da pessoa'
+                            if match:
+                                matches += 1
+                                person_kml_found += 1
+                                try:
+                                    print(f'DUPLICANDO {kml}')
+                                    duplicated.append(folder)
+                                    shutil.copy(current_rsitem,
+                                                current_sub_path + '\\' + 'AREA CONSOLIDADA.kml')
+                                except shutil.SameFileError as e:
+                                    print('Erro o arquivo já existe', e)
+                            if person_kml_found == 0:
+                                not_duplicated[f'{folder}'] = 'não tem kml com o nome da pessoa'
 
-                        else:
-                            already_exists_file.append(folder)
+                    else:
+                        already_exists_file.append(folder)
 
                     # não tem pasta 'RECIBO E SHAPE' ou 'RECIBO E SHAPEFILE'
             else:
