@@ -13,7 +13,7 @@ def is_recibo(folder):
 
 
 def file_move():
-    path = 'C:\\Users\joao\Desktop\CORREÇAO DE IMAGEM\REGIONAL BACABAL\VITORINO FREIRE\SÃO JOSÉ DOS CURICAS'
+    path = input('MOVE: Digite o diretorio: ')
     os.chdir(path)
     print('Diretório atual: ', os.getcwd())
 
@@ -39,8 +39,10 @@ def file_move():
                 for rsitem in current_files:
                     current_rsitem = current_sub_path + '\\' + rsitem
                     print(f'movendo - {rsitem}')
-                    shutil.move(current_rsitem, folder)
-
+                    try:
+                        shutil.move(current_rsitem, folder)
+                    except shutil.SameFileError as e:
+                        print('Exception ',e)
                 move_count += 1
                 os.rmdir(current_sub_path)
 

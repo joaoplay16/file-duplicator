@@ -62,7 +62,6 @@ def file_duplicator():
         if os.path.isdir(current_path):
             dir_items = os.listdir(current_path)
             dir_items = [x for x in dir_items if folder_exists(current_path + f'\\{x}') and is_recibo(x)]
-            print(dir_items)
             if(len(dir_items) > 0):
                 for item in dir_items:
                     current_sub_path = current_path + '\\' + item
